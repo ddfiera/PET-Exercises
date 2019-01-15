@@ -30,12 +30,17 @@ import petlib
 from os import urandom
 from petlib.cipher import Cipher
 
+aes = Cipher("aes-128-gcm")
+key = urandom(16)
+iv = urandom(16)
+
 def encrypt_message(K, message):
     """ Encrypt a message under a key K """
 
     plaintext = message.encode("utf8")
-    
-    ## YOUR CODE HERE
+    key = K
+
+    ciphertext, tag = aes.quick_gcm_enc(key, iv, plaintext)
 
     return (iv, ciphertext, tag)
 
@@ -44,7 +49,10 @@ def decrypt_message(K, iv, ciphertext, tag):
 
         In case the decryption fails, throw an exception.
     """
-    ## YOUR CODE HERE
+
+    key = K
+
+    plain = aes.quick_gcm_dec(key, iv, ciphertext, tag)
 
     return plain.encode("utf8")
 
